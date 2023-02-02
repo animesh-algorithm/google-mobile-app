@@ -10,6 +10,7 @@ import {
   View,
   Keyboard,
 } from "react-native";
+import { search } from "../utils/search";
 
 export default function Home() {
   const [searchTerm, setSearchTerm] = useState<string>("");
@@ -17,8 +18,9 @@ export default function Home() {
   const handleChange = (text: string) => {
     setSearchTerm(text);
   };
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     console.log(searchTerm);
+    await search(searchTerm, "");
   };
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>

@@ -2,6 +2,7 @@ import { StatusBar } from "expo-status-bar";
 import { StyleSheet, View } from "react-native";
 import React from "react";
 import Navigator from "./routes/HomeStack";
+import "react-native-config";
 
 export default function App() {
   return (
