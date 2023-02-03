@@ -12,15 +12,25 @@ import {
 } from "react-native";
 import { search } from "../utils/search";
 
-export default function Home() {
+interface Props {
+  navigation: {
+    navigate: (
+      screen: string,
+      params: { data: any; searchTerm: string }
+    ) => void;
+  };
+}
+
+const Home: React.FC<Props> = ({ navigation }) => {
   const [searchTerm, setSearchTerm] = useState<string>("");
 
   const handleChange = (text: string) => {
     setSearchTerm(text);
   };
   const handleSubmit = async () => {
-    console.log(searchTerm);
-    await search(searchTerm, "");
+    const data = await search(searchTerm, "");
+    navigation.navigate("SearchResults", { data, searchTerm });
+    setSearchTerm("");
   };
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
@@ -40,7 +50,7 @@ export default function Home() {
       </View>
     </TouchableWithoutFeedback>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -65,3 +75,5 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
 });
+
+export default Home;

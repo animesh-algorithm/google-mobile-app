@@ -3,5 +3,5 @@
   "compilerOptions": {
     "strict": true
   },
-  "typesRoots": ["./types"]
+  "typeRoots": ["./types", "../node_modules/@types", "../@types"]
 }
