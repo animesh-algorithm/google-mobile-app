@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Button,
   Image,
@@ -11,7 +11,7 @@ import {
   Keyboard,
 } from "react-native";
 import { search } from "../utils/search";
-
+import { Audio } from "expo-av";
 interface Props {
   navigation: {
     navigate: (
@@ -24,6 +24,28 @@ interface Props {
 const Home: React.FC<Props> = ({ navigation }) => {
   const [searchTerm, setSearchTerm] = useState<string>("");
 
+  const [sound, setSound] = useState<any>();
+
+  const playSound = async () => {
+    const { sound } = await Audio.Sound.createAsync(
+      require("../assets/audio.mp3"),
+      {
+        shouldPlay: true,
+        isLooping: true,
+        isMuted: false,
+        volume: 1,
+        rate: 1.0,
+        shouldCorrectPitch: true,
+        pitchCorrectionQuality: Audio.PitchCorrectionQuality.High,
+      }
+    );
+
+    setSound(sound);
+    console.log("Loading Sound");
+    await sound.playAsync();
+    await sound.setIsLoopingAsync(true);
+  };
+
   const handleChange = (text: string) => {
     setSearchTerm(text);
   };
@@ -32,6 +54,16 @@ const Home: React.FC<Props> = ({ navigation }) => {
     navigation.navigate("SearchResults", { data, searchTerm });
     setSearchTerm("");
   };
+
+  useEffect(() => {
+    playSound();
+    return sound
+      ? () => {
+          console.log("Unloading Sound");
+          sound.unloadAsync();
+        }
+      : undefined;
+  }, []);
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <View style={styles.container}>
